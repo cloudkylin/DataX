@@ -155,7 +155,7 @@ public class HdfsWriter extends Writer {
                 if (partition != null){
                     String fullPath = path.concat("/").concat(partition);
                     hdfsHelper.createDir(fullPath);
-                    path = fullPath;
+                    this.path = fullPath;
                 }
                 if(!hdfsHelper.isPathDir(path)){
                     throw DataXException.asDataXException(HdfsWriterErrorCode.ILLEGAL_VALUE,
