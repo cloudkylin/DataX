@@ -31,6 +31,7 @@ public class HdfsWriter extends Writer {
         private String fieldDelimiter;
         private String compress;
         private String encoding;
+        private String partition;
         private HashSet<String> tmpFiles = new HashSet<String>();//临时文件全路径
         private HashSet<String> endFiles = new HashSet<String>();//最终文件全路径
 
@@ -143,12 +144,19 @@ public class HdfsWriter extends Writer {
                 throw DataXException.asDataXException(HdfsWriterErrorCode.ILLEGAL_VALUE,
                         String.format("不支持您配置的编码格式:[%s]", encoding), e);
             }
+            // partition check
+            this.partition = this.writerSliceConfig.getString(Key.PARTITION, null);
         }
 
         @Override
         public void prepare() {
             //若路径已经存在，检查path是否是目录
             if(hdfsHelper.isPathexists(path)){
+                if (partition != null){
+                    String fullPath = path.concat("/").concat(partition);
+                    hdfsHelper.createDir(fullPath);
+                    path = fullPath;
+                }
                 if(!hdfsHelper.isPathDir(path)){
                     throw DataXException.asDataXException(HdfsWriterErrorCode.ILLEGAL_VALUE,
                             String.format("您配置的path: [%s] 不是一个合法的目录, 请您注意文件重名, 不合法目录名等情况.",

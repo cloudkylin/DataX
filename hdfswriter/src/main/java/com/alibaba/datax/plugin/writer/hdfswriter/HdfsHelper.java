@@ -176,6 +176,20 @@ public  class HdfsHelper {
         return isDir;
     }
 
+    public void createDir(String filePath){
+        LOG.info(String.format("start create dir [%s] .",filePath));
+        try {
+            if (!isPathexists(filePath)){
+                Path path = new Path(filePath);
+                fileSystem.mkdirs(path);
+            }
+        } catch (IOException e) {
+            String message = String.format("创建目录[%s]时发生IO异常,请检查您的网络是否正常！",filePath);
+            LOG.error(message);
+            throw DataXException.asDataXException(HdfsWriterErrorCode.CONNECT_HDFS_IO_ERROR, e);
+        }
+    }
+
     public void deleteFiles(Path[] paths){
         for(int i=0;i<paths.length;i++){
             LOG.info(String.format("delete file [%s].", paths[i].toString()));

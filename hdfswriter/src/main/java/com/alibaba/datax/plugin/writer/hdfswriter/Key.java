@@ -27,6 +27,8 @@ public class Key {
     public static final String COMPRESS = "compress";
     // not must, not default \N
     public static final String NULL_FORMAT = "nullFormat";
+    // not must, not default
+    public static final String PARTITION = "partition";
     // Kerberos
     public static final String HAVE_KERBEROS = "haveKerberos";
     public static final String KERBEROS_KEYTAB_FILE_PATH = "kerberosKeytabFilePath";
